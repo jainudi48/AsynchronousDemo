@@ -2,12 +2,7 @@
 using AsynchronousDemo.Managers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,7 +20,7 @@ namespace AsynchronousDemo
         private void AddJobs()
         {
             jobs = new JobDataModel();
-            foreach(var job in jobs.JobList)
+            foreach (var job in jobs.JobList)
             {
                 rtbSyncJobs.Text += job + "\n";
                 rtbAsyncJobs.Text += job + "\n";
@@ -36,60 +31,52 @@ namespace AsynchronousDemo
         {
             rtbSyncProcessedTime.Text = string.Empty;
             lblSyncCPUTime.Text = string.Empty;
-            lblSyncClockTime.Text = string.Empty;
         }
 
         private void btnAsyncReset_Click(object sender, EventArgs e)
         {
             rtbAsyncProcessedTime.Text = string.Empty;
             lblAsyncCPUTime.Text = string.Empty;
-            lblAsyncClockTime.Text = string.Empty;
         }
 
         private void btnSyncRun_Click(object sender, EventArgs e)
         {
-            int totalCPUTime = 0;
             rtbSyncProcessedTime.Text = string.Empty;
             lblSyncCPUTime.Text = string.Empty;
-            lblSyncClockTime.Text = string.Empty;
             WebsiteDownloadManager processSync = new WebsiteDownloadManager();
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            Stopwatch sw = Stopwatch.StartNew();
             foreach (var jobURI in jobs.JobList)
             {
-                rtbSyncProcessedTime.Text += processSync.DownloadWebsite(jobURI, ref totalCPUTime).ToString() + "\n";
+                rtbSyncProcessedTime.Text += processSync.DownloadWebsite(jobURI).ToString() + "\n";
             }
-            stopwatch.Stop();
+            sw.Stop();
 
-            lblSyncClockTime.Text = stopwatch.ElapsedMilliseconds.ToString();
-            lblSyncCPUTime.Text = totalCPUTime.ToString();
+            lblSyncCPUTime.Text = sw.ElapsedMilliseconds.ToString();
         }
 
         private async void btnAsyncRun_Click(object sender, EventArgs e)
         {
-            int totalCPUTime = 0;
             rtbAsyncProcessedTime.Text = string.Empty;
             lblAsyncCPUTime.Text = string.Empty;
-            lblAsyncClockTime.Text = string.Empty;
             WebsiteDownloadManager process = new WebsiteDownloadManager();
             List<Task<int>> tasks = new List<Task<int>>();
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            Stopwatch sw = Stopwatch.StartNew();
             foreach (var jobURI in jobs.JobList)
             {
-                tasks.Add(Task.Run(() => process.DownloadWebsite(jobURI, ref totalCPUTime)));
+                tasks.Add(Task.Run(() => process.DownloadWebsite(jobURI)));
             }
-            
+
             var timeList = await Task.WhenAll(tasks);
-            stopwatch.Stop();
+            sw.Stop();
 
             foreach (var time in timeList)
             {
                 rtbAsyncProcessedTime.Text += time + "\n";
             }
 
-            lblAsyncClockTime.Text = stopwatch.ElapsedMilliseconds.ToString();
-            lblAsyncCPUTime.Text = totalCPUTime.ToString();
+            lblAsyncCPUTime.Text = sw.ElapsedMilliseconds.ToString();
         }
     }
 }
