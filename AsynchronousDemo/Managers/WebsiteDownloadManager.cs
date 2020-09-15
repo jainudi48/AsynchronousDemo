@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using AsynchronousDemo.Data;
+﻿using AsynchronousDemo.Data;
 using System.Diagnostics;
+using System.Net;
 
 namespace AsynchronousDemo.Managers
 {
     class WebsiteDownloadManager
     {
         private WebDataModel webDataModel;
-        
+
         public WebsiteDownloadManager()
         {
             webDataModel = new WebDataModel();

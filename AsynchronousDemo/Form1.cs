@@ -2,12 +2,7 @@
 using AsynchronousDemo.Managers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,7 +20,7 @@ namespace AsynchronousDemo
         private void AddJobs()
         {
             jobs = new JobDataModel();
-            foreach(var job in jobs.JobList)
+            foreach (var job in jobs.JobList)
             {
                 rtbSyncJobs.Text += job + "\n";
                 rtbAsyncJobs.Text += job + "\n";
@@ -72,7 +67,7 @@ namespace AsynchronousDemo
             {
                 tasks.Add(Task.Run(() => process.DownloadWebsite(jobURI)));
             }
-            
+
             var timeList = await Task.WhenAll(tasks);
             sw.Stop();
 
