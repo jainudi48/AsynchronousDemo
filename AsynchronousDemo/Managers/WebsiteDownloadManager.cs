@@ -17,7 +17,7 @@ namespace AsynchronousDemo.Managers
         {
             webDataModel = new WebDataModel();
         }
-        public int DownloadWebsite(string jobURI, ref int totalTime)
+        public int DownloadWebsite(string jobURI)
         {
             Stopwatch stopwatch;
             WebClient webClientLocal = new WebClient();
@@ -25,7 +25,6 @@ namespace AsynchronousDemo.Managers
             webDataModel.URI = jobURI;
             webDataModel.WebData = webClientLocal.DownloadString(jobURI);
             stopwatch.Stop();
-            totalTime += stopwatch.Elapsed.Milliseconds;
             return stopwatch.Elapsed.Milliseconds;
         }
     }
